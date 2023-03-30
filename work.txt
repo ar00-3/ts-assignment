@@ -1,0 +1,311 @@
+1.First, you need to choose a public API to fetch data from. There are many
+public APIs available that provide different types of data such as weather,
+news, sports, and more. Choose an API that provides data in a tabular
+format.
+
+Sure, there are many public APIs that provide data in a tabular format. Here are a few options:
+
+1.OpenWeatherMap API - Provides weather data in a tabular format including temperature, humidity, wind speed, and more.
+2.COVID-19 API - Provides data on COVID-19 cases, deaths, and recoveries in a tabular format.
+3. World Bank API - Provides data on various economic indicators in a tabular format.
+4. NBA API - Provides data on NBA games, teams, players, and statistics in a tabular format.
+ You can choose any of these APIs depending on your project's requirements and the type of data you need.
+
+2.Next, create a TypeScript file, say index.ts, in which you will write the code
+to fetch data from the API and display it in a table.
+
+Sure, here's an example TypeScript code for fetching data from the OpenWeatherMap API and displaying it in a table:
+
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind_speed: number;
+}
+
+async function getWeatherData(city: string): Promise<WeatherData> {
+  const apiKey = "YOUR_API_KEY";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+
+  return {
+    temp: data.main.temp,
+    humidity: data.main.humidity,
+    wind_speed: data.wind.speed
+  };
+}
+
+function createTable(data: WeatherData) {
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  for (const [key, value] of Object.entries(data)) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = key;
+    td2.textContent = value.toString();
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+
+async function main() {
+  const weatherData = await getWeatherData("London");
+  createTable(weatherData);
+}
+
+In this code, we define an interface WeatherData that describes the structure of the data returned by the OpenWeatherMap API. We then define a function getWeatherData that fetches the weather data for a given city using the API and returns it in the WeatherData format.
+
+We also define a function createTable that takes the WeatherData object and creates an HTML table to display the data.
+
+Finally, we define a main function that calls getWeatherData and createTable to fetch the data and display it in a table. We call main at the end of the script to execute the code. Note that you will need to replace "YOUR_API_KEY" with your own API key obtained from OpenWeatherMap.
+
+3.Use the XMLHttpRequest object to fetch data from the API. You can also
+use the fetch API, which is available in modern browsers. Make sure to
+handle any errors that may occur during the fetch process.
+
+Sure, here's an example TypeScript code for fetching data from the OpenWeatherMap API using XMLHttpRequest and handling errors:
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind_speed: number;
+}
+
+function getWeatherData(city: string): Promise<WeatherData> {
+  return new Promise<WeatherData>((resolve, reject) => {
+    const apiKey = "YOUR_API_KEY";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", apiUrl);
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        resolve({
+          temp: data.main.temp,
+          humidity: data.main.humidity,
+          wind_speed: data.wind.speed,
+        });
+      } else {
+        reject(`Error: ${xhr.statusText}`);
+      }
+    };
+    xhr.onerror = () => {
+      reject("Network error");
+    };
+    xhr.send();
+  });
+}
+
+function createTable(data: WeatherData) {
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  for (const [key, value] of Object.entries(data)) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = key;
+    td2.textContent = value.toString();
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+
+async function main() {
+  try {
+    const weatherData = await getWeatherData("London");
+    createTable(weatherData);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+main();
+
+In this code, we define a getWeatherData function that creates an XMLHttpRequest object and sends a GET request to the OpenWeatherMap API to fetch the weather data for a given city. We handle the onload and onerror events of the XMLHttpRequest object to parse the response and handle errors respectively. If the request is successful, we resolve the promise with the WeatherData object. If there is an error, we reject the promise with an error message.
+
+We also define a createTable function that takes the WeatherData object and creates an HTML table to display the data.
+
+Finally, we define a main function that calls getWeatherData and createTable to fetch the data and display it in a table. We use a try-catch block to handle any errors that may occur during the fetch process.
+
+4.Once you have retrieved the data, parse it into a JavaScript object. You can
+use JSON.parse() to parse JSON data.
+
+Sure, here's an updated example TypeScript code that uses JSON.parse() to parse the data retrieved from the OpenWeatherMap API into a JavaScript object
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind_speed: number;
+}
+
+async function getWeatherData(city: string): Promise<WeatherData> {
+  const apiKey = "YOUR_API_KEY";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+
+  return {
+    temp: data.main.temp,
+    humidity: data.main.humidity,
+    wind_speed: data.wind.speed
+  };
+}
+
+function createTable(data: WeatherData) {
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  for (const [key, value] of Object.entries(data)) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = key;
+    td2.textContent = value.toString();
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+
+async function main() {
+  const weatherData = await getWeatherData("London");
+  createTable(weatherData);
+}
+
+main();
+In this code, we use the await keyword to wait for the fetch and json methods to complete before parsing the data into a JavaScript object. We then return the WeatherData object with the relevant weather data.
+
+We also define a createTable function that takes the WeatherData object and creates an HTML table to display the data.
+
+Finally, we define a main function that calls getWeatherData and createTable to fetch the data and display it in a table.
+
+5.Create an HTML table dynamically using the data you retrieved. You can
+create a table element and dynamically add tr and td elements to it using
+JavaScript.
+
+Sure, here's an updated TypeScript code that creates an HTML table dynamically using the data retrieved from the OpenWeatherMap API:
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind_speed: number;
+}
+
+async function getWeatherData(city: string): Promise<WeatherData> {
+  const apiKey = "YOUR_API_KEY";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+
+  return {
+    temp: data.main.temp,
+    humidity: data.main.humidity,
+    wind_speed: data.wind.speed
+  };
+}
+
+function createTable(data: WeatherData) {
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  for (const [key, value] of Object.entries(data)) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = key;
+    td2.textContent = value.toString();
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+
+async function main() {
+  const weatherData = await getWeatherData("London");
+  createTable(weatherData);
+}
+main();
+
+In this code, we define a createTable function that creates an HTML table dynamically using the createElement method. We use a for...of loop to iterate through the WeatherData object and create a new table row (tr) and table data (td) element for each property. We set the textContent property of the td elements to the corresponding property value of the WeatherData object.
+
+Finally, we append the td elements to the tr element, and append the tr element to the tbody element. We then append the tbody element to the table element, and append the table element to the body element of the HTML document.
+
+We call the createTable function with the WeatherData object returned by the getWeatherData function to display the data in an HTML table.
+
+6. Finally, append the table to the DOM so that it is visible on the webpage
+
+Sure! We can append the table to the DOM by using the appendChild() method of a DOM element. Here's an updated TypeScript code that appends the table to the body of the HTML document:
+interface WeatherData {
+  temp: number;
+  humidity: number;
+  wind_speed: number;
+}
+
+async function getWeatherData(city: string): Promise<WeatherData> {
+  const apiKey = "YOUR_API_KEY";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+
+  return {
+    temp: data.main.temp,
+    humidity: data.main.humidity,
+    wind_speed: data.wind.speed
+  };
+}
+
+function createTable(data: WeatherData) {
+  const table = document.createElement("table");
+  const tbody = document.createElement("tbody");
+
+  for (const [key, value] of Object.entries(data)) {
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = key;
+    td2.textContent = value.toString();
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tbody.appendChild(tr);
+  }
+
+  table.appendChild(tbody);
+  document.body.appendChild(table); // append table to the body of the HTML document
+}
+
+async function main() {
+  const weatherData = await getWeatherData("London");
+  createTable(weatherData);
+}
+
+main();
+In this code, we append the table element created by the createTable function to the body element of the HTML document using the appendChild() method. This will append the table to the DOM and make it visible on the webpage.
